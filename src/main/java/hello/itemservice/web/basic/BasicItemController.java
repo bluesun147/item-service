@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -67,15 +68,23 @@ public class BasicItemController {
     }
 
 //    @PostMapping("/add")
-//    public String addItemV3(@ModelAttribute Item item, Model model) { // 클래스명(Item) 첫글자 소문자로 바꿔서(item) 자동으로. 생략가능. @ModelAttribute도 생략가능
-//        itemRepository.save(item);
-//        return "basic/item";
-//    }
+    public String addItemV3(@ModelAttribute Item item, Model model) { // 클래스명(Item) 첫글자 소문자로 바꿔서(item) 자동으로. 생략가능. @ModelAttribute도 생략가능
+        itemRepository.save(item);
+        return "basic/item";
+    }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV5(@ModelAttribute Item item) {
         itemRepository.save(item);
         return "redirect:/basic/items/" + item.getId();
+    }
+
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId()); // 얘가
+        redirectAttributes.addAttribute("status", true); //없는건 쿼리 파라미터로 넘어감. http://localhost:8080/basic/items/4?status=true
+        return "redirect:/basic/items/{itemId}"; // 여기 들어감
     }
 
     @GetMapping("/{itemId}/edit")
