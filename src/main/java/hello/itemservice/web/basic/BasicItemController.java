@@ -66,10 +66,16 @@ public class BasicItemController {
         return "basic/item";
     }
 
+//    @PostMapping("/add")
+//    public String addItemV3(@ModelAttribute Item item, Model model) { // 클래스명(Item) 첫글자 소문자로 바꿔서(item) 자동으로. 생략가능. @ModelAttribute도 생략가능
+//        itemRepository.save(item);
+//        return "basic/item";
+//    }
+
     @PostMapping("/add")
-    public String addItemV3(@ModelAttribute Item item, Model model) { // 클래스명(Item) 첫글자 소문자로 바꿔서(item) 자동으로. 생략가능. @ModelAttribute도 생략가능
+    public String addItemV5(@ModelAttribute Item item) {
         itemRepository.save(item);
-        return "basic/item";
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
